@@ -20,16 +20,6 @@ axios
     console.log(error)
   });
 
-  // function requestFollowers(followersURL) {
-  //   axios
-  //     .get(followersURL)
-  //     .then(results => {
-  //       console.log(results.data)
-
-  //     })
-  // }
-
-//  requestFollowers("https://api.github.com/users/matty-serwer/followers") 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -94,6 +84,12 @@ function getCardsForFollowers(userURL) {
           })
           getCards(followersArray)
         })
+        .catch(error => {
+          console.log(error)
+        })
+    })
+    .catch(error => {
+      console.log(error)
     })
 }
 

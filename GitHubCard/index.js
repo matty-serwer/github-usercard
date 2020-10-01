@@ -10,8 +10,7 @@ const cards = document.querySelector('.cards')
 axios
   .get("https://api.github.com/users/matty-serwer")
   .then(results => {
-    // console.log(results.data);
-    let card = cardMaker(results.data);
+    let card = cardMaker(results.data)
     cards.appendChild(card)
 
   })
@@ -19,6 +18,17 @@ axios
     // error handling
     console.log(error)
   });
+
+  function requestFollowers(followersURL) {
+    axios
+      .get(followersURL)
+      .then(results => {
+        console.log(results.data)
+
+      })
+  }
+
+ requestFollowers("https://api.github.com/users/matty-serwer/followers") 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -45,18 +55,36 @@ axios
 
 const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'Miikis', 'MileyWright', 'ohmyzsh', 'cli', 'TreywRoberts'];
 
-followersArray.forEach(follower => {
-  let followerAdd = `https://api.github.com/users/${follower}`
+// getCards(followersArray);
+
+function getCards(array) {
+  array.forEach(follower => {
+    let followerAdd = `https://api.github.com/users/${follower}`
+    axios
+      .get(followerAdd)
+      .then(results => {
+        let card = cardMaker(results.data)
+        cards.appendChild(card)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  })
+}
+
+function getCardsForFollowers(userURL) {
   axios
-    .get(followerAdd)
-    .then(results => {
-      let card = cardMaker(results.data)
-      cards.appendChild(card)
+    .get(userURL)
+    .then(res => {
+      const followersURL = res.data.followers_url
+      console.log(followersURL)
     })
-    .catch(error => {
-      console.log(error)
-    })
-})
+}
+
+getCardsForFollowers("https://api.github.com/users/matty-serwer") 
+
+
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.

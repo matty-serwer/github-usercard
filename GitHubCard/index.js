@@ -9,14 +9,15 @@ const cards = document.querySelector('.cards')
 
 axios
   .get("https://api.github.com/users/matty-serwer")
-  .then((results) => {
-    console.log(results.data);
+  .then(results => {
+    // console.log(results.data);
     let card = cardMaker(results.data);
     cards.appendChild(card)
 
   })
-  .catch((error) => {
+  .catch(error => {
     // error handling
+    console.log(error)
   });
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -42,7 +43,20 @@ axios
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'Miikis', 'MileyWright', 'ohmyzsh', 'cli', 'TreywRoberts'];
+
+followersArray.forEach(follower => {
+  let followerAdd = `https://api.github.com/users/${follower}`
+  axios
+    .get(followerAdd)
+    .then(results => {
+      let card = cardMaker(results.data)
+      cards.appendChild(card)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -87,8 +101,8 @@ function cardMaker(data) {
   username.textContent = data.login
   location.textContent = `Location: ${data.location}`
   profile.textContent = `Profile: `
-  gitAddress.href = data.url
-  gitAddress.textContent = data.url
+  gitAddress.href = data.html_url
+  gitAddress.textContent = data.html_url
   followers.textContent = `Followers: ${data.followers}`
   following.textContent = `Following: ${data.following}`
   bio.textContent = `Bio: ${data.bio}`
@@ -104,10 +118,6 @@ function cardMaker(data) {
   cardInfo.appendChild(following)
   cardInfo.appendChild(bio)
 
-
-
-  console.log(gitAddress)
-  console.log(card)
   return card
 }
 

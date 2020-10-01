@@ -7,6 +7,7 @@ import axios from "axios";
 */
 const cards = document.querySelector('.cards')
 
+
 axios
   .get("https://api.github.com/users/matty-serwer")
   .then(results => {
@@ -19,16 +20,16 @@ axios
     console.log(error)
   });
 
-  function requestFollowers(followersURL) {
-    axios
-      .get(followersURL)
-      .then(results => {
-        console.log(results.data)
+  // function requestFollowers(followersURL) {
+  //   axios
+  //     .get(followersURL)
+  //     .then(results => {
+  //       console.log(results.data)
 
-      })
-  }
+  //     })
+  // }
 
- requestFollowers("https://api.github.com/users/matty-serwer/followers") 
+//  requestFollowers("https://api.github.com/users/matty-serwer/followers") 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -53,9 +54,9 @@ axios
     user, and adding that card to the DOM.
 */
 
-const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'Miikis', 'MileyWright', 'ohmyzsh', 'cli', 'TreywRoberts'];
+// const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'Miikis', 'MileyWright', 'ohmyzsh', 'cli', 'TreywRoberts'];
 
-// getCards(followersArray);
+// get cards for an array of users
 
 function getCards(array) {
   array.forEach(follower => {
@@ -72,16 +73,33 @@ function getCards(array) {
   })
 }
 
+// get cards for followers of userURL
+
 function getCardsForFollowers(userURL) {
   axios
     .get(userURL)
     .then(res => {
+      // get url with followers information
       const followersURL = res.data.followers_url
-      console.log(followersURL)
+      return followersURL
+    })
+    .then (followersURL => {
+      axios
+        .get(followersURL)
+        .then(res => {
+          const followersData = res.data
+          console.log(followersData)
+          const followersArray = followersData.map(follower => {
+              return follower.login
+          })
+          getCards(followersArray)
+        })
     })
 }
 
 getCardsForFollowers("https://api.github.com/users/matty-serwer") 
+
+getCardsForFollowers("https://api.github.com/users/mileywright")
 
 
 
@@ -148,13 +166,3 @@ function cardMaker(data) {
 
   return card
 }
-
-
-/*
-  List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
-*/
